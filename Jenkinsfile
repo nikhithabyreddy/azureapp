@@ -2,9 +2,11 @@ import groovy.json.JsonSlurper
 
 def getFtpPublishProfile(def publishProfilesJson) {
   def pubProfiles = new JsonSlurper().parseText(publishProfilesJson)
-  for (p in pubProfiles)
-    if (p['publishMethod'] == 'FTP')
+  for (p in pubProfiles) {
+    if (p['publishMethod'] == 'FTP') {
       return [url: p.publishUrl, username: p.userName, password: p.userPWD]
+    }
+  }
 }
 
 pipeline {
@@ -35,9 +37,9 @@ pipeline {
           def webAppName = 'nikhithaapp'
           
           // login Azure
-          withCredentials([usernamePassword(credentialsId: 'azure', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
+          withCredentials([azureServicePrincipal(credentialsId: 'azure', variable: 'AZURE_CREDENTIALS')]) {
             sh '''
-              az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
+              az login --service-principal --username $AZURE_CREDENTIALS_SERVICE_PRINCIPAL_ID --password $AZURE_CREDENTIALS_SERVICE_PRINCIPAL_SECRET --tenant $AZURE_CREDENTIALS_TENANT_ID
               az account set -s $AZURE_SUBSCRIPTION_ID
             '''
           }
@@ -56,3 +58,4 @@ pipeline {
     }
   }
 }
+
