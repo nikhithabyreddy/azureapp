@@ -11,8 +11,8 @@ pipeline {
   agent any
   
   environment {
-    AZURE_SUBSCRIPTION_ID = '<f36e20ed-7535-418f-b7e3-3c26c6d85da9>'
-    AZURE_TENANT_ID = '<15fae2f6-4d4b-4382-a2a5-89478e38a20e>'
+    AZURE_SUBSCRIPTION_ID = 'f36e20ed-7535-418f-b7e3-3c26c6d85da9'
+    AZURE_TENANT_ID = '15fae2f6-4d4b-4382-a2a5-89478e38a20e'
   }
   
   stages {
@@ -31,11 +31,11 @@ pipeline {
     stage('deploy') {
       steps {
         script {
-          def resourceGroup = '<firstwebapp2899_group>'
-          def webAppName = '<nikhithaapp>'
+          def resourceGroup = 'firstwebapp2899_group'
+          def webAppName = 'nikhithaapp'
           
           // login Azure
-          withCredentials([usernamePassword(credentialsId: '<azure>', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
+          withCredentials([usernamePassword(credentialsId: 'azure', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
             sh '''
               az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
               az account set -s $AZURE_SUBSCRIPTION_ID
